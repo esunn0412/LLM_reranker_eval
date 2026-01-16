@@ -1,0 +1,75 @@
+# Example Evaluation Configurations
+# Copy this file and modify for different evaluation scenarios
+
+# ========================================
+# Example 1: Quick Test (10 queries)
+# ========================================
+dataset:
+  name: "msmarco"
+  split: "validation"
+  num_queries: 10  # Small subset for testing
+  num_passages: 10  # Max passages per query (actual count may vary)
+  cache_dir: "/local/scratch/tkim462/.cache/huggingface"
+
+evaluation:
+  k: 10  # Cutoff for @k metrics (NDCG@10, MAP@10)
+  save_rankings: true
+  save_raw_outputs: true
+
+output:
+  results_dir: "/local/scratch/tkim462/rerank/results"
+
+# ========================================
+# Example 2: Full MS MARCO Validation
+# ========================================
+# dataset:
+#   name: "msmarco"
+#   split: "validation"
+#   num_queries: null  # All queries
+#   num_passages: 10  # Max passages per query
+#   cache_dir: "/local/scratch/tkim462/.cache/huggingface"
+#
+# evaluation:
+#   k: 10  # Cutoff for @k metrics
+#   save_rankings: true
+#   save_raw_outputs: false  # Save space
+#
+# output:
+#   results_dir: "/local/scratch/tkim462/rerank/results_full"
+
+# ========================================
+# Example 3: BEIR SciFact Dataset
+# ========================================
+# dataset:
+#   name: "beir"
+#   beir_dataset: "scifact"
+#   split: "test"
+#   num_queries: 100
+#   cache_dir: "/local/scratch/tkim462/.cache/huggingface"
+#
+# evaluation:
+#   k: 10  # Cutoff for @k metrics
+#   save_rankings: true
+#   save_raw_outputs: true
+#
+# output:
+#   results_dir: "/local/scratch/tkim462/rerank/results_beir"
+
+# ========================================
+# Example 4: Standard 100 Query Benchmark
+# ========================================
+# dataset:
+#   name: "msmarco"
+#   split: "validation"
+#   num_queries: 100
+#   num_passages: 10  # Max passages per query
+#   cache_dir: "/local/scratch/tkim462/.cache/huggingface"
+#
+# evaluation:
+#   k: 10  # Cutoff for @k metrics (NDCG@10, MAP@10)
+#   save_rankings: true
+#   save_raw_outputs: true
+#
+# output:
+#   results_dir: "/local/scratch/tkim462/rerank/results"
+

@@ -1,0 +1,26 @@
+# Evaluation Configuration
+
+# Dataset Configuration
+dataset:
+  name: "msmarco"  # Options: "msmarco", "beir", "trec-dl"
+  split: "validation"  # For MS MARCO
+  num_queries: 100  # Set to null for all queries
+  num_passages: 10  # Maximum passages to rerank per query (actual count may vary)
+  cache_dir: "/local/scratch/tkim462/.cache/huggingface"
+
+# Evaluation Settings
+evaluation:
+  # Core metrics for reranking evaluation:
+  # - NDCG@10: Quality of top-10 ranking (position-weighted)
+  # - MAP@10: Binary relevance in top-10
+  # - NDCG/MAP (full): Evaluated on all passages (adapts to actual passage count per query)
+  k: 10  # Cutoff for @k metrics
+  
+  # Save detailed outputs
+  save_rankings: true
+  save_raw_outputs: true
+  
+# Output Configuration
+output:
+  results_dir: "/local/scratch/tkim462/rerank/results"
+  # Results will be saved to: {results_dir}/{model_name}/

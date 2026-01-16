@@ -10,9 +10,19 @@
 #SBATCH --gres=gpu:1
 #SBATCH --partition=h200
 
-# Activate your virtual environment
+# Set cache directories
+export HF_HOME='/local/scratch/tkim462/.cache/huggingface'
+export XDG_CACHE_HOME='/local/scratch/tkim462/.cache'
+
+# Activate virtual environment
+source /local/scratch/tkim462/rerank/rerank_eval/bin/activate
+
+# Verify environment
+echo "Python location: $(which python3)"
+echo "Python version: $(python3 --version)"
+echo "Torch installed: $(python3 -c 'import torch; print(torch.__version__)' 2>&1)"
 
 # Run the Python script
-python /local/scratch/tkim462/run_reranking.py
+python3 run_reranking.py
 
 echo "Job completed!"
