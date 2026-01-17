@@ -1,0 +1,26 @@
+# LLM Ranker Evaluation - Core Dependencies
+
+# Core ML/NLP
+torch>=2.0.0
+transformers>=4.30.0
+datasets>=2.14.0
+numpy>=1.24.0
+
+# LLM Inference
+vllm>=0.3.0  # For local LLM inference
+openai>=1.0.0  # For OpenAI API
+anthropic>=0.25.0  # For Claude API
+
+# Data and Utilities
+pyyaml>=6.0
+tqdm>=4.65.0
+
+# Optional: IR Evaluation
+# pytrec_eval>=0.5  # For TREC-style metrics (optional but recommended)
+
+# Optional: BEIR benchmark
+# beir>=2.0.0  # Uncomment if using BEIR datasets
+
+# Development
+jupyter>=1.0.0  # For notebooks
+ipython>=8.0.0

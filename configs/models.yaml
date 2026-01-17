@@ -56,7 +56,7 @@ closed_source_models:
     max_tokens: 300
     temperature: 0.0
     api_key_env: "OPENAI_API_KEY"
-    enabled: true
+    enabled: false
     
   - name: "gpt-4o"
     model_id: "gpt-4o"

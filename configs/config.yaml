@@ -11,10 +11,10 @@ dataset:
 # Evaluation Settings
 evaluation:
   # Core metrics for reranking evaluation:
-  # - NDCG@10: Quality of top-10 ranking (position-weighted)
-  # - MAP@10: Binary relevance in top-10
+  # - NDCG@k: Quality of top-k ranking (position-weighted)
+  # - MAP@k: Binary relevance in top-k
   # - NDCG/MAP (full): Evaluated on all passages (adapts to actual passage count per query)
-  k: 10  # Cutoff for @k metrics
+  k: 10  # Cutoff for @k metrics (set to null or large value like 100 for full ranking)
   
   # Save detailed outputs
   save_rankings: true

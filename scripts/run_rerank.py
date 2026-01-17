@@ -247,11 +247,8 @@ def run_reranking(model_config: Dict, eval_config: Dict, output_dir: Path):
         # Reorder passages
         ranked_passages = [item['passages'][idx] for idx in ranking_indices]
         
-        # Store ranking for evaluation (doc_id -> score)
-        all_rankings[qid] = {
-            p['pid']: float(num_passages - i)
-            for i, p in enumerate(ranked_passages)
-        }
+        # Store ranking for evaluation (ranked list of passage IDs)
+        all_rankings[qid] = [p['pid'] for p in ranked_passages]
         
         # Store qrels
         all_qrels[qid] = item['qrels']

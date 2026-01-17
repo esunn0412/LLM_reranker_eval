@@ -15,7 +15,7 @@ export HF_HOME='/local/scratch/tkim462/.cache/huggingface'
 export XDG_CACHE_HOME='/local/scratch/tkim462/.cache'
 
 # Activate virtual environment
-source /local/scratch/tkim462/rerank/rerank_eval/bin/activate
+source /local/scratch/tkim462/rerank/venv/bin/activate
 
 # Verify environment
 echo "Python location: $(which python3)"

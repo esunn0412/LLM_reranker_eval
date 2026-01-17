@@ -15,11 +15,7 @@ from datetime import datetime
 import sys
 sys.path.append(str(Path(__file__).parent.parent))
 
-from utils.metrics import (
-    calculate_reranking_metrics,
-    use_pytrec_eval,
-    convert_scores_to_ranking
-)
+from utils.metrics import calculate_reranking_metrics
 
 
 def load_eval_data(eval_file: Path) -> Dict:
@@ -28,47 +24,22 @@ def load_eval_data(eval_file: Path) -> Dict:
         return json.load(f)
 
 
-def calculate_metrics(eval_data: Dict, use_pytrec: bool = True, k: int = 10) -> Dict[str, float]:
+def calculate_metrics(eval_data: Dict, k: int = 10) -> Dict[str, float]:
     """
     Calculate evaluation metrics
     
     Args:
-        eval_data: Evaluation data dictionary
-        use_pytrec: Whether to use pytrec_eval (if available)
+        eval_data: Evaluation data dictionary with 'rankings' (ranked lists) and 'qrels'
         k: Cutoff for @k metrics
     
     Returns:
         Dictionary of metric scores
     """
-    rankings = eval_data['rankings']
-    qrels = eval_data['qrels']
-    
-    # Try pytrec_eval first
-    if use_pytrec:
-        try:
-            metrics = use_pytrec_eval(qrels, rankings, k=k)
-            if metrics:
-                # Rename to standard format
-                renamed = {}
-                for key, val in metrics.items():
-                    if f'ndcg_cut_{k}' in key:
-                        renamed[f'NDCG@{k}'] = val
-                    elif f'map_cut_{k}' in key:
-                        renamed[f'MAP@{k}'] = val
-                    else:
-                        renamed[key] = val
-                return renamed
-        except Exception as e:
-            print(f"Warning: pytrec_eval failed ({e}), using fallback metrics")
-    
-    # Convert score dicts to ranked lists for fallback metrics
-    ranked_lists = {
-        qid: convert_scores_to_ranking(scores)
-        for qid, scores in rankings.items()
-    }
+    rankings = eval_data['rankings']  # Dict[query_id, List[passage_id]] - already ranked
+    qrels = eval_data['qrels']        # Dict[query_id, Dict[passage_id, relevance]]
     
     # Calculate metrics using our implementation
-    metrics = calculate_reranking_metrics(ranked_lists, qrels, k=k)
+    metrics = calculate_reranking_metrics(rankings, qrels, k=k)
     
     return metrics
 
@@ -184,10 +155,8 @@ def main():
                        help='Path to baseline eval_data.json for comparison')
     parser.add_argument('--output', type=str, default=None,
                        help='Path to save metrics report (default: same dir as input)')
-    parser.add_argument('--no_pytrec', action='store_true',
-                       help='Disable pytrec_eval, use fallback metrics')
     parser.add_argument('--k', type=int, default=10,
-                       help='Cutoff for @k metrics (default: 10)')
+                       help='Cutoff for @k metrics (default: 10, use large value like 999 for full ranking)')
     
     args = parser.parse_args()
     
@@ -202,7 +171,7 @@ def main():
     
     # Calculate metrics
     print(f"Calculating metrics (k={args.k})...")
-    metrics = calculate_metrics(eval_data, use_pytrec=not args.no_pytrec, k=args.k)
+    metrics = calculate_metrics(eval_data, k=args.k)
     
     # Print results
     model_name = eval_data.get('model_config', {}).get('name', 'Unknown')

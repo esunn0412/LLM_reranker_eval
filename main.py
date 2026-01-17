@@ -67,7 +67,7 @@ def run_single_model(model_config: Dict, eval_config_path: str,
     
     # Run reranking
     cmd = [
-        'python', 'scripts/run_rerank.py',
+        'python3', 'scripts/run_rerank.py',
         '--model', model_name,
         '--config', eval_config_path,
         '--models_config', models_config_path
@@ -90,14 +90,16 @@ def run_single_model(model_config: Dict, eval_config_path: str,
         print(f"⚠️  Eval file not found: {eval_file}")
         return None
     
-    # Get k parameter from config
+    # Get k parameter from config (None means full ranking)
     k = eval_config.get('evaluation', {}).get('k', 10)
     
     cmd = [
-        'python', 'scripts/evaluate.py',
-        '--input', str(eval_file),
-        '--k', str(k)
+        'python3', 'scripts/evaluate.py',
+        '--input', str(eval_file)
     ]
+    
+    if k is not None:
+        cmd.extend(['--k', str(k)])
     
     success = run_command(cmd, f"Evaluating: {model_name}")
     

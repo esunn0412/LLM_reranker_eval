@@ -1,1 +1,3 @@
 rerank_eval/*
+*.out
+*.err
